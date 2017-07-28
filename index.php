@@ -43,13 +43,14 @@ and open the template in the editor.
 
 
             <?php
-            $cod_professor = '49718';
+            $cod_professor = '40884';
             $modulo['2'] = [];
             $modulo['3'] = [];
             $modulo['4'] = [];
             $modulo['5'] = [];
             $modulo['6'] = [];
             $modulo['7'] = [];
+
 
             $mysqli = mysqli_connect("localhost", "root", "", "eaish_2");
             $query = "SELECT * FROM `hora_prof` WHERE `cod_professor`='$cod_professor';";
@@ -60,25 +61,48 @@ and open the template in the editor.
                     if (is_numeric($horario)) {
                         $index = $horario;
                     } else {
-                        if ($horario != "")
+                        
                             array_push($modulo[$index], $horario);
                     }
                 }
             }
-            
-            print_r($modulo['2']); 
-            echo "<br>"; 
-            print_r($modulo['3']); 
-            echo "<br>"; 
-            print_r($modulo['4']); 
-            echo "<br>"; 
-            print_r($modulo['5']); 
-            echo "<br>"; 
-            print_r($modulo['6']); 
-            echo "<br>"; 
-            print_r($modulo['6']); 
-            echo "<br>"; 
 
+            for ($index = 2; $index < 8; $index++) {
+                $vetor = $modulo[$index];
+                $n = count($vetor);
+
+                if ($vetor != []) {
+                    for ($i = 1; $i < $n; $i++) {
+                        $cur = $vetor[$i];
+                        $j = $i - 1;
+                        while ($j >= 0 && $vetor[$j] > $cur) {
+                            $vetor[$j + 1] = $vetor[$j--];
+                            $vetor[$j + 1] = $cur;
+                        }
+                    }
+
+                    // eliminação dos espaços em branco
+/**
+                    $modulo[$index] = [];
+                    $branco = $vetor[0];
+                    for ($i = 0; $i < $n; $i++) {
+                        if ($vetor[$i] != $branco) {
+                            array_push($modulo[$index], $vetor[$i]);
+                        }
+                    }
+ * 
+ */
+                }
+                $modulo[$index]=$vetor;
+            }
+
+            for ($index = 2; $index < 8; $index++) {
+                print_r($modulo[$index]);
+                echo "<br>";
+            }
+          
+ 
+ 
             $horarios = ['AULA', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q'];
             $horas = ['AULA' => '',
                 'A' => '7h',
