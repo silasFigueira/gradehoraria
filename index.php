@@ -27,6 +27,7 @@ and open the template in the editor.
 
     </head>
     <body>
+       
         <table>
             <colgroup>
                 <col style="width: 200px">
@@ -42,14 +43,13 @@ and open the template in the editor.
 
 
             <?php
-            $cod_professor = '47320';
+            $cod_professor = '49718';
             $modulo['2'] = [];
             $modulo['3'] = [];
             $modulo['4'] = [];
             $modulo['5'] = [];
             $modulo['6'] = [];
             $modulo['7'] = [];
-            
 
             $mysqli = mysqli_connect("localhost", "root", "", "eaish_2");
             $query = "SELECT * FROM `hora_prof` WHERE `cod_professor`='$cod_professor';";
@@ -117,7 +117,7 @@ and open the template in the editor.
             //CONSTRUÇÃO TABELA
             
             foreach ($horarios as $horario) {
-                $linha.="<tr><td><div class=\"horario_aula\">$horario<div></td>";
+                $linha.="<tr><td><div class=\"horario_aula\">$horario</div><div class=\"horario_aula\">$horas_aula[$horario]</div></td>";
                 if ($horario == 'AULA') {
                     foreach ($dias as $dia) {
                         if ($dia != "AULA") {
@@ -136,12 +136,19 @@ and open the template in the editor.
                             if (in_array($horario, $modulo[$diasNumero[$dia]])) {
                                 $linha.="<td>AULA</td>";
                             } else {
-                                $linha.="<td><select name=\"$diasNumero[$dia]$horario\">
-                                <option></option>
-                                <option value=\"ADM\">ADM</option>
-                                <option value=\"PES\">PES</option>
-                                <option value=\"EXT\">EXT</option>
-                                </select></td>";
+                                
+                                $linha.="<td></td>";
+                                
+                                /**
+                                  $linha.="<td><select name=\"$diasNumero[$dia]$horario\">
+                                  <option></option>
+                                  <option value=\"ADM\">ADM</option>
+                                  <option value=\"PES\">PES</option>
+                                  <option value=\"EXT\">EXT</option>
+                                  </select></td>";
+                                 * 
+                                 */
+                                
                             }
                         }
                     }
