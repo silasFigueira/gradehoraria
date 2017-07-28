@@ -61,8 +61,8 @@ and open the template in the editor.
                     if (is_numeric($horario)) {
                         $index = $horario;
                     } else {
-                        
-                            array_push($modulo[$index], $horario);
+
+                        array_push($modulo[$index], $horario);
                     }
                 }
             }
@@ -81,28 +81,28 @@ and open the template in the editor.
                         }
                     }
 
-                    // eliminação dos espaços em branco
-/**
-                    $modulo[$index] = [];
-                    $branco = $vetor[0];
-                    for ($i = 0; $i < $n; $i++) {
-                        if ($vetor[$i] != $branco) {
-                            array_push($modulo[$index], $vetor[$i]);
-                        }
-                    }
- * 
- */
+
+                    /**
+                      $modulo[$index] = [];
+                      $branco = $vetor[0];
+                      for ($i = 0; $i < $n; $i++) {
+                      if ($vetor[$i] != $branco) {
+                      array_push($modulo[$index], $vetor[$i]);
+                      }
+                      }
+                     * 
+                     */
                 }
-                $modulo[$index]=$vetor;
+                $modulo[$index] = $vetor;
             }
 
             for ($index = 2; $index < 8; $index++) {
                 print_r($modulo[$index]);
                 echo "<br>";
             }
-          
- 
- 
+
+
+
             $horarios = ['AULA', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q'];
             $horas = ['AULA' => '',
                 'A' => '7h',
@@ -152,7 +152,7 @@ and open the template in the editor.
                 'Sábado' => 7];
             $linha = '';
             //CONSTRUÇÃO TABELA
-
+$a = 0;
             foreach ($horarios as $horario) {
 
                 if ($horario == 'AULA') {
@@ -169,7 +169,7 @@ and open the template in the editor.
                     }
                 } else {
                     $linha.="<td>$horas[$horario]</td>";
-
+                    
                     foreach ($dias as $dia) {
                         if ($dia == 'AULA') {
                             
@@ -178,19 +178,24 @@ and open the template in the editor.
                         } else {
                             if (in_array($horario, $modulo[$diasNumero[$dia]])) {
                                 $linha.="<td>AULA</td>";
+                                $a = 1;
                             } else {
-
-                                $linha.="<td></td>";
-
-                                /**
-                                  $linha.="<td><select name=\"$diasNumero[$dia]$horario\">
-                                  <option></option>
-                                  <option value=\"ADM\">ADM</option>
-                                  <option value=\"PES\">PES</option>
-                                  <option value=\"EXT\">EXT</option>
-                                  </select></td>";
-                                 * 
-                                 */
+                                if ($a != 0) {
+                                    $linha.="<td>aqui</td>";
+                                    $a = 0;
+                                } else {
+                                    $linha.="<td>Acolá</td>";
+                                    
+                                    /**
+                                      $linha.="<td><select name=\"$diasNumero[$dia]$horario\">
+                                      <option></option>
+                                      <option value=\"ADM\">ADM</option>
+                                      <option value=\"PES\">PES</option>
+                                      <option value=\"EXT\">EXT</option>
+                                      </select></td>";
+                                     * 
+                                     */
+                                }
                             }
                         }
                     }
