@@ -39,12 +39,7 @@ and open the template in the editor.
 
 
             <?php
-            $cod_professor = '49718';
-
-
-            $horarioDia[$cod_professor] = [];
-            $horarioHora[$cod_professor] = [];
-
+            $cod_professor = '47320';
             $modulo['2'] = [];
             $modulo['3'] = [];
             $modulo['4'] = [];
@@ -66,41 +61,6 @@ and open the template in the editor.
                     }
                 }
             }
-            print_r($modulo['2']);
-            echo "<br>";
-            print_r($modulo['3']);
-            echo "<br>";
-            print_r($modulo['4']);
-            echo "<br>";
-            print_r($modulo['5']);
-            echo "<br>";
-            print_r($modulo['6']);
-            echo "<br>";
-            print_r($modulo['6']);
-            echo "<br>";
-
-
-            /**
-              foreach ($horarios as $horario) {
-              if (is_numeric($horario)) { {
-              if (!in_array($horario, $horarioDia[$cod_professor])) {
-              array_push($horarioDia[$cod_professor], $horario);
-              }
-              }
-              } else {
-              if (!in_array($horario, $horarioHora[$cod_professor])) {
-              array_push($horarioHora[$cod_professor], $horario);
-              }
-              }
-              }
-             * 
-             */
-
-//            $horarioDia['$cod_professor;'] = ['2', '5'];
-//            $horarioHora['$cod_professor;'] = ['N', 'O', 'P', 'Q'];
-
-            print_r($horarioDia[$cod_professor]);
-            print_r($horarioHora[$cod_professor]);
 
             $horarios = ['AULA', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q'];
             $horas = ['AULA' => '',
@@ -148,10 +108,15 @@ and open the template in the editor.
                         } elseif ($dia == 'ADM') {
                             
                         } else {
-                            if (in_array($horario,$modulo[$diasNumero[$dia]] )) {
+                            if (in_array($horario, $modulo[$diasNumero[$dia]])) {
                                 $linha.="<td>AULA</td>";
                             } else {
-                                $linha.="<td></td>";
+                                $linha.="<td><select name=\"$diasNumero[$dia]$horario\">
+                                <option></option>
+                                <option value=\"ADM\">ADM</option>
+                                <option value=\"PES\">PES</option>
+                                <option value=\"EXT\">EXT</option>
+                                </select></td>";
                             }
                         }
                     }
