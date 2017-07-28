@@ -27,7 +27,7 @@ and open the template in the editor.
 
     </head>
     <body>
-       
+
         <table>
             <colgroup>
                 <col style="width: 200px">
@@ -65,6 +65,19 @@ and open the template in the editor.
                     }
                 }
             }
+            
+            print_r($modulo['2']); 
+            echo "<br>"; 
+            print_r($modulo['3']); 
+            echo "<br>"; 
+            print_r($modulo['4']); 
+            echo "<br>"; 
+            print_r($modulo['5']); 
+            echo "<br>"; 
+            print_r($modulo['6']); 
+            echo "<br>"; 
+            print_r($modulo['6']); 
+            echo "<br>"; 
 
             $horarios = ['AULA', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q'];
             $horas = ['AULA' => '',
@@ -115,9 +128,15 @@ and open the template in the editor.
                 'Sábado' => 7];
             $linha = '';
             //CONSTRUÇÃO TABELA
-            
+
             foreach ($horarios as $horario) {
-                $linha.="<tr><td><div class=\"horario_aula\">$horario</div><div class=\"horario_aula\">$horas_aula[$horario]</div></td>";
+
+                if ($horario == 'AULA') {
+                    $linha.="<tr><td>$horario</td>";
+                } else {
+                    $linha.="<tr><td><div class=\"horario_aula\">$horario</div><div class=\"horario_aula\">$horas_aula[$horario]</div></td>";
+                }
+
                 if ($horario == 'AULA') {
                     foreach ($dias as $dia) {
                         if ($dia != "AULA") {
@@ -136,9 +155,9 @@ and open the template in the editor.
                             if (in_array($horario, $modulo[$diasNumero[$dia]])) {
                                 $linha.="<td>AULA</td>";
                             } else {
-                                
+
                                 $linha.="<td></td>";
-                                
+
                                 /**
                                   $linha.="<td><select name=\"$diasNumero[$dia]$horario\">
                                   <option></option>
@@ -148,7 +167,6 @@ and open the template in the editor.
                                   </select></td>";
                                  * 
                                  */
-                                
                             }
                         }
                     }
