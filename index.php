@@ -39,11 +39,70 @@ and open the template in the editor.
 
 
             <?php
+            $cod_professor = '49718';
 
-            $horarioDia['47320'] = ['2', '5'];
-            $horarioHora['47320'] = ['N', 'O', 'P', 'Q'];
 
-            $horarios = ['AULA', 'A', 'B', 'C', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q'];
+            $horarioDia[$cod_professor] = [];
+            $horarioHora[$cod_professor] = [];
+
+            $modulo['2'] = [];
+            $modulo['3'] = [];
+            $modulo['4'] = [];
+            $modulo['5'] = [];
+            $modulo['6'] = [];
+            $modulo['7'] = [];
+
+            $mysqli = mysqli_connect("localhost", "root", "", "eaish");
+            $query = "SELECT * FROM `hora_prof` WHERE `cod_professor`='$cod_professor';";
+            $sql = mysqli_query($mysqli, $query) or die();
+            while ($con = mysqli_fetch_array($sql)) {
+                $horarios = str_split(trim($con['horario']));
+                foreach ($horarios as $horario) {
+                    if (is_numeric($horario)) {
+                        $index = $horario;
+                    } else {
+                        if ($horario != "")
+                            array_push($modulo[$index], $horario);
+                    }
+                }
+            }
+            print_r($modulo['2']);
+            echo "<br>";
+            print_r($modulo['3']);
+            echo "<br>";
+            print_r($modulo['4']);
+            echo "<br>";
+            print_r($modulo['5']);
+            echo "<br>";
+            print_r($modulo['6']);
+            echo "<br>";
+            print_r($modulo['6']);
+            echo "<br>";
+
+
+            /**
+              foreach ($horarios as $horario) {
+              if (is_numeric($horario)) { {
+              if (!in_array($horario, $horarioDia[$cod_professor])) {
+              array_push($horarioDia[$cod_professor], $horario);
+              }
+              }
+              } else {
+              if (!in_array($horario, $horarioHora[$cod_professor])) {
+              array_push($horarioHora[$cod_professor], $horario);
+              }
+              }
+              }
+             * 
+             */
+
+//            $horarioDia['$cod_professor;'] = ['2', '5'];
+//            $horarioHora['$cod_professor;'] = ['N', 'O', 'P', 'Q'];
+
+            print_r($horarioDia[$cod_professor]);
+            print_r($horarioHora[$cod_professor]);
+
+            $horarios = ['AULA', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q'];
             $horas = ['AULA' => '',
                 'A' => '7h',
                 'B' => '8h',
@@ -65,12 +124,12 @@ and open the template in the editor.
             $dias = ['AULA', 'ADM', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
             $diasNumero = [
-                'Segunda' => '2',
-                'Terça' => '3',
-                'Quarta' => '4',
-                'Quinta' => '5',
-                'Sexta' => '6',
-                'Sábado' => '7'];
+                'Segunda' => 2,
+                'Terça' => 3,
+                'Quarta' => 4,
+                'Quinta' => 5,
+                'Sexta' => 6,
+                'Sábado' => 7];
             $linha = '';
             foreach ($horarios as $horario) {
                 $linha.="<tr><td>$horario</td>";
@@ -89,7 +148,7 @@ and open the template in the editor.
                         } elseif ($dia == 'ADM') {
                             
                         } else {
-                            if (in_array($diasNumero[$dia], $horarioDia['47320']) and in_array($horario, $horarioHora['47320'])) {
+                            if (in_array($horario,$modulo[$diasNumero[$dia]] )) {
                                 $linha.="<td>AULA</td>";
                             } else {
                                 $linha.="<td></td>";
@@ -103,8 +162,9 @@ and open the template in the editor.
             }
 
             echo $linha;
-
             ?>
+
+
         </table>
 
     </body>
