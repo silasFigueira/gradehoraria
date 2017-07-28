@@ -18,6 +18,9 @@ and open the template in the editor.
                 text-align: center;
                 padding: 5px;
             }
+            .horario_aula {
+                font-size: 0.5em;
+            }
         </style>
 
 
@@ -46,8 +49,9 @@ and open the template in the editor.
             $modulo['5'] = [];
             $modulo['6'] = [];
             $modulo['7'] = [];
+            
 
-            $mysqli = mysqli_connect("localhost", "root", "", "eaish");
+            $mysqli = mysqli_connect("localhost", "root", "", "eaish_2");
             $query = "SELECT * FROM `hora_prof` WHERE `cod_professor`='$cod_professor';";
             $sql = mysqli_query($mysqli, $query) or die();
             while ($con = mysqli_fetch_array($sql)) {
@@ -81,6 +85,25 @@ and open the template in the editor.
                 'P' => '21h',
                 'Q' => '22h',
             ];
+
+            $horas_aula = ['AULA' => '',
+                'A' => '7;30-8:20',
+                'B' => '8:20-9:10',
+                'C' => '9:20-10:10',
+                'D' => '10:10-11:00',
+                'E' => '11:10-12:00',
+                'F' => '12:00-12:50',
+                'G' => '13:00-13:50',
+                'H' => '13:50-14:40',
+                'I' => '14:50-15:40',
+                'J' => '15:40-16:30',
+                'L' => '16:40-17:30',
+                'M' => '17:30-18:20',
+                'N' => '18:30-19:20',
+                'O' => '19:20-20:10',
+                'P' => '20:20-21:10',
+                'Q' => '21:10-22:00',
+            ];
             $dias = ['AULA', 'ADM', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
             $diasNumero = [
@@ -91,8 +114,10 @@ and open the template in the editor.
                 'Sexta' => 6,
                 'Sábado' => 7];
             $linha = '';
+            //CONSTRUÇÃO TABELA
+            
             foreach ($horarios as $horario) {
-                $linha.="<tr><td>$horario</td>";
+                $linha.="<tr><td><div class=\"horario_aula\">$horario<div></td>";
                 if ($horario == 'AULA') {
                     foreach ($dias as $dia) {
                         if ($dia != "AULA") {
