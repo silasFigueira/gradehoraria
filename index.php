@@ -12,204 +12,64 @@ and open the template in the editor.
             col {
                 width: 200px;
             }
-            td {
+            table, td {
                 border-collapse: collapse;
                 border: 1px dotted black;
                 text-align: center;
                 padding: 5px;
             }
             .horario_aula {
-                font-size: 0.5em;
+                font-size: 0.8em;
             }
+            .caixa{
+                width: 100%;
+            }
+            .corpo{
+
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 5%;  
+            }
+
         </style>
 
 
 
     </head>
     <body>
+        <div class="corpo">
+            <form action="pesq_exten.php" method="post">
+                <table>
+                    <colgroup>
+                        <col style="width: 150px">
+                        <col style="width: 150px">
+                        <col style="width: 150px">
+                        <col style="width: 150px">
+                        <col style="width: 150px">
+                        <col style="width: 150px">
+                        <col style="width: 150px">
+                        <col style="width: 150px">
+                        <col style="width: 150px">
+                    </colgroup>
 
-        <table>
-            <colgroup>
-                <col style="width: 200px">
-                <col style="width: 200px">
-                <col style="width: 200px">
-                <col style="width: 200px">
-                <col style="width: 200px">
-                <col style="width: 200px">
-                <col style="width: 200px">
-                <col style="width: 200px">
-                <col style="width: 200px">
-            </colgroup>
-
-
-            <?php
-            $cod_professor = '40884';
-            $modulo['2'] = [];
-            $modulo['3'] = [];
-            $modulo['4'] = [];
-            $modulo['5'] = [];
-            $modulo['6'] = [];
-            $modulo['7'] = [];
-
-
-            $mysqli = mysqli_connect("localhost", "root", "", "eaish_2");
-            $query = "SELECT * FROM `hora_prof` WHERE `cod_professor`='$cod_professor';";
-            $sql = mysqli_query($mysqli, $query) or die();
-            while ($con = mysqli_fetch_array($sql)) {
-                $horarios = str_split(trim($con['horario']));
-                foreach ($horarios as $horario) {
-                    if (is_numeric($horario)) {
-                        $index = $horario;
-                    } else {
-
-                        array_push($modulo[$index], $horario);
+                    <?php
+                    require 'funcao.php';
+                    session_start();
+                    if(isset($_POST['cod'])){
+                    $_SESSION['cod_professor'] = $_POST['cod'];
                     }
-                }
-            }
+                    echo "Nome do professor: ". professor($_SESSION['cod_professor']);
+                    echo grade($_SESSION['cod_professor']);
+                    ?>                
+                </table>
+                <button type="submit">Enviar</button>
+            </form>
 
-            for ($index = 2; $index < 8; $index++) {
-                $vetor = $modulo[$index];
-                $n = count($vetor);
+        </div>
+        <script type="text/javascript">
 
-                if ($vetor != []) {
-                    for ($i = 1; $i < $n; $i++) {
-                        $cur = $vetor[$i];
-                        $j = $i - 1;
-                        while ($j >= 0 && $vetor[$j] > $cur) {
-                            $vetor[$j + 1] = $vetor[$j--];
-                            $vetor[$j + 1] = $cur;
-                        }
-                    }
-
-
-                    /**
-                      $modulo[$index] = [];
-                      $branco = $vetor[0];
-                      for ($i = 0; $i < $n; $i++) {
-                      if ($vetor[$i] != $branco) {
-                      array_push($modulo[$index], $vetor[$i]);
-                      }
-                      }
-                     * 
-                     */
-                }
-                $modulo[$index] = $vetor;
-            }
-
-            for ($index = 2; $index < 8; $index++) {
-                print_r($modulo[$index]);
-                echo "<br>";
-            }
-
-
-
-            $horarios = ['AULA', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q'];
-            $horas = ['AULA' => '',
-                'A' => '7h',
-                'B' => '8h',
-                'C' => '9h',
-                'D' => '10h',
-                'E' => '11h',
-                'F' => '12h',
-                'G' => '13h',
-                'H' => '14h',
-                'I' => '15h',
-                'J' => '16h',
-                'L' => '17h',
-                'M' => '18h',
-                'N' => '19h',
-                'O' => '20h',
-                'P' => '21h',
-                'Q' => '22h',
-            ];
-
-            $horas_aula = ['AULA' => '',
-                'A' => '7;30-8:20',
-                'B' => '8:20-9:10',
-                'C' => '9:20-10:10',
-                'D' => '10:10-11:00',
-                'E' => '11:10-12:00',
-                'F' => '12:00-12:50',
-                'G' => '13:00-13:50',
-                'H' => '13:50-14:40',
-                'I' => '14:50-15:40',
-                'J' => '15:40-16:30',
-                'L' => '16:40-17:30',
-                'M' => '17:30-18:20',
-                'N' => '18:30-19:20',
-                'O' => '19:20-20:10',
-                'P' => '20:20-21:10',
-                'Q' => '21:10-22:00',
-            ];
-            $dias = ['AULA', 'ADM', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-
-            $diasNumero = [
-                'Segunda' => 2,
-                'Terça' => 3,
-                'Quarta' => 4,
-                'Quinta' => 5,
-                'Sexta' => 6,
-                'Sábado' => 7];
-            $linha = '';
-            //CONSTRUÇÃO TABELA
-$a = 0;
-            foreach ($horarios as $horario) {
-
-                if ($horario == 'AULA') {
-                    $linha.="<tr><td>$horario</td>";
-                } else {
-                    $linha.="<tr><td><div class=\"horario_aula\">$horario</div><div class=\"horario_aula\">$horas_aula[$horario]</div></td>";
-                }
-
-                if ($horario == 'AULA') {
-                    foreach ($dias as $dia) {
-                        if ($dia != "AULA") {
-                            $linha.="<td>$dia</td>";
-                        }
-                    }
-                } else {
-                    $linha.="<td>$horas[$horario]</td>";
-                    
-                    foreach ($dias as $dia) {
-                        if ($dia == 'AULA') {
-                            
-                        } elseif ($dia == 'ADM') {
-                            
-                        } else {
-                            if (in_array($horario, $modulo[$diasNumero[$dia]])) {
-                                $linha.="<td>AULA</td>";
-                                $a = 1;
-                            } else {
-                                if ($a != 0) {
-                                    $linha.="<td>aqui</td>";
-                                    $a = 0;
-                                } else {
-                                    $linha.="<td>Acolá</td>";
-                                    
-                                    /**
-                                      $linha.="<td><select name=\"$diasNumero[$dia]$horario\">
-                                      <option></option>
-                                      <option value=\"ADM\">ADM</option>
-                                      <option value=\"PES\">PES</option>
-                                      <option value=\"EXT\">EXT</option>
-                                      </select></td>";
-                                     * 
-                                     */
-                                }
-                            }
-                        }
-                    }
-                }
-
-
-                $linha.="</tr>";
-            }
-
-            echo $linha;
-            ?>
-
-
-        </table>
+        </script>
 
     </body>
 </html>
