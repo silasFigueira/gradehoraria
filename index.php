@@ -8,15 +8,16 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title></title>
+        <link href="css/app.css" type="text/css" rel="stylesheet">
         <style>
             col {
                 width: 200px;
             }
             table, td {
                 border-collapse: collapse;
-                border: 1px dotted black;
+                //border: 1px solid black;
                 text-align: center;
-                padding: 5px;
+                //padding: 5px;
             }
             .horario_aula {
                 font-size: 0.8em;
@@ -25,11 +26,15 @@ and open the template in the editor.
                 width: 100%;
             }
             .corpo{
-
                 width: 80%;
                 margin-left: auto;
                 margin-right: auto;
-                margin-top: 5%;  
+                margin-top: 1%;  
+            }
+            .table select {
+                background-color: #550000;
+                color: white;
+                font-weight: bold;
             }
 
         </style>
@@ -40,7 +45,7 @@ and open the template in the editor.
     <body>
         <div class="corpo">
             <form action="pesq_exten.php" method="post">
-                <table>
+                <table class="table">
                     <colgroup>
                         <col style="width: 150px">
                         <col style="width: 150px">
@@ -56,14 +61,20 @@ and open the template in the editor.
                     <?php
                     require 'funcao.php';
                     session_start();
-                    if(isset($_POST['cod'])){
-                    $_SESSION['cod_professor'] = $_POST['cod'];
-                    }
-                    echo "Nome do professor: ". professor($_SESSION['cod_professor']);
-                    echo grade($_SESSION['cod_professor']);
-                    ?>                
+                    if (isset($_POST['cod'])) {
+                        $_SESSION['cod_professor'] = $_POST['cod'];
+                    }                    
+                    ?>
+                    <tr><td colspan="4"><a href="professor.php">ESCOLHA O PROFESSOR</a></td><td colspan="4"></td></tr>
+                    <tr><td colspan="2"></td><td colspan="5"><?php echo professor($_SESSION['cod_professor']); ?></td>
+                        <td><button  class="btn" type="submit">Enviar</button></td>
+                    </tr>
+                    <?php echo grade($_SESSION['cod_professor']);?>
+                    <tr><td colspan="7"></td>
+                        <td><button  class="btn" type="submit">Enviar</button></td>
+                    </tr>
                 </table>
-                <button type="submit">Enviar</button>
+
             </form>
 
         </div>

@@ -35,42 +35,14 @@ function grade($cod) {
     $N_adm = 0;
     $N_pesq = 0;
     $N_ext = 0;
-
-    $aula['2'] = [];
-    $aula['3'] = [];
-    $aula['4'] = [];
-    $aula['5'] = [];
-    $aula['6'] = [];
-    $aula['7'] = [];
-
-    $adm['2'] = [];
-    $adm['3'] = [];
-    $adm['4'] = [];
-    $adm['5'] = [];
-    $adm['6'] = [];
-    $adm['7'] = [];
-
-    $pesq['2'] = [];
-    $pesq['3'] = [];
-    $pesq['4'] = [];
-    $pesq['5'] = [];
-    $pesq['6'] = [];
-    $pesq['7'] = [];
-
-    $ext['2'] = [];
-    $ext['3'] = [];
-    $ext['4'] = [];
-    $ext['5'] = [];
-    $ext['6'] = [];
-    $ext['7'] = [];
     
-    $modulo['2']=[];
-    $modulo['3']=[];
-    $modulo['4']=[];
-    $modulo['5']=[];
-    $modulo['6']=[];
-    $modulo['7']=[];
-
+    for($a=2;$a<=7;$a++){
+    $aula[$a] = [];   
+    $adm[$a] = [];    
+    $pesq[$a] = [];    
+    $ext[$a] = [];
+    $modulo[$a]=[];
+    }
 
     $mysqli = mysqli_connect("localhost", "root", "", "eaish_2");
     $query = "SELECT * FROM `hora_prof` WHERE `cod_professor`='$cod_professor';";
@@ -113,12 +85,7 @@ function grade($cod) {
         }
         $aula[$index] = $vetor;
     }
-    /**
-      for ($index = 2; $index < 8; $index++) {
-      print_r($modulo[$index]);
-      echo "<br>";
-      }
-     */
+ 
     $horarios = ['AULA', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q'];
     $horas = ['AULA' => '',
         'A' => '7h',
@@ -213,7 +180,7 @@ function grade($cod) {
                       //if ($x == 1) {
                       //    $linha.="<td></td>";
                       //} else {
-                      $linha.="<td><select name=\"$diasNumero[$dia]$horario\">
+                      $linha.="<td><select class=\"form-control\" name=\"$diasNumero[$dia]$horario\">
                       <option></option>
                       <option value=\"ADM\">ADM</option>
                       <option value=\"PES\">PES</option>
@@ -231,12 +198,6 @@ function grade($cod) {
         $x++;
     }
 
-
-
-    $linha.="<br>Total de aulas: $N_aula";
-    $linha.="<br>Total de adminisraçao: $N_adm";
-    $linha.="<br>Total de pesquisa: $N_pesq";
-    $linha.="<br>Total de extesao: $N_ext";
     return $linha;
 }
 
