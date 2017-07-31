@@ -32,13 +32,24 @@ and open the template in the editor.
                 margin-top: 1%;  
             }
             .table select {
-                background-color: #550000;
-                color: white;
+                background-color: #7f7e7e;
+                color: #ffffff;
                 font-weight: bold;
+            }
+            .first_line  {
+             background-color:gray;
+             color: white;
             }
 
         </style>
 
+        <?php
+        require 'funcao.php';
+        session_start();
+        if (isset($_POST['cod'])) {
+            $_SESSION['cod_professor'] = $_POST['cod'];
+        }
+        ?>          
 
 
     </head>
@@ -57,22 +68,17 @@ and open the template in the editor.
                         <col style="width: 150px">
                         <col style="width: 150px">
                     </colgroup>
-
-                    <?php
-                    require 'funcao.php';
-                    session_start();
-                    if (isset($_POST['cod'])) {
-                        $_SESSION['cod_professor'] = $_POST['cod'];
-                    }                    
-                    ?>
-                    <tr><td colspan="4"><a href="professor.php">ESCOLHA O PROFESSOR</a></td><td colspan="4"></td></tr>
-                    <tr><td colspan="2"></td><td colspan="5"><?php echo professor($_SESSION['cod_professor']); ?></td>
+                    <tr><td colspan="2" style="text-align:  left"><a href="professor.php">ESCOLHA O PROFESSOR</a></td><td colspan="5"><?php echo professor($_SESSION['cod_professor']); ?></td>
                         <td><button  class="btn" type="submit">Enviar</button></td>
+                        <?php horaProfessor($_SESSION['cod_professor']); ?>
+
                     </tr>
-                    <?php echo grade($_SESSION['cod_professor']);?>
+                    <?php echo grade($_SESSION['cod_professor']); ?>
                     <tr><td colspan="7"></td>
                         <td><button  class="btn" type="submit">Enviar</button></td>
-                    </tr>
+                    </tr>                    
+                   <?php listaDisciplina($_SESSION['cod_professor'])?>
+                    
                 </table>
 
             </form>

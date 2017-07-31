@@ -28,20 +28,63 @@ function selectProfessor() {
     }
 }
 
-function grade($cod) {
-    
-    $cod_professor = $cod;
+function horaProfessor($cod_professor) {
+
+    $cod_professor = $cod_professor;
+
     $N_aula = 0;
     $N_adm = 0;
     $N_pesq = 0;
     $N_ext = 0;
-    
-    for($a=2;$a<=7;$a++){
-    $aula[$a] = [];   
-    $adm[$a] = [];    
-    $pesq[$a] = [];    
-    $ext[$a] = [];
-    $modulo[$a]=[];
+    $N_total = 0;
+    $nao_conta = ['ECO1813', 'ECO1814', 'SER1907', 'SER1908', 'CTE1807', 'CTE1817', 'CTE1818'];
+
+    $mysqli = mysqli_connect("localhost", "root", "", "eaish_2");
+    $query = "SELECT * FROM `hora_prof` WHERE `cod_professor`='$cod_professor';";
+    $sql = mysqli_query($mysqli, $query) or die();
+
+    while ($con = mysqli_fetch_array($sql)) {
+        $espaco = str_replace(" ", "", $con['horario']);
+        $horarios = str_split($espaco);
+        $cod_disciplina = $con['cod_disciplina'];
+
+        foreach ($horarios as $horario) {
+            if (is_numeric($horario)) {
+                $index = $horario;
+            } elseif ($cod_disciplina == 'XADM') {
+                $N_adm++;
+            } elseif ($cod_disciplina == 'XPESQ') {
+                $N_pesq++;
+            } elseif ($cod_disciplina == 'XEXT') {
+                $N_ext++;
+            } else {
+                if (in_array($cod_disciplina, $nao_conta)) {
+                    
+                } else {
+                    $N_aula++;
+                }
+            }
+        }
+    }
+
+    echo "<tr class=\"first_line\"><td>Aulas</td><td>$N_aula</td><td>Adminstração</td><td>$N_adm</td><td>Pesquisa</td><td>$N_pesq</td><td>Extenção</td><td>$N_ext</td></tr>";
+}
+
+function grade($cod_professor) {
+
+    $cod_professor = $cod_professor;
+    $N_aula = 0;
+    $N_adm = 0;
+    $N_pesq = 0;
+    $N_ext = 0;
+    $nao_conta = ['ECO1813', 'ECO1814', 'SER1907', 'SER1908', 'CTE1807', 'CTE1817', 'CTE1818'];
+
+    for ($a = 2; $a <= 7; $a++) {
+        $aula[$a] = [];
+        $adm[$a] = [];
+        $pesq[$a] = [];
+        $ext[$a] = [];
+        $modulo[$a] = [];
     }
 
     $mysqli = mysqli_connect("localhost", "root", "", "eaish_2");
@@ -49,7 +92,8 @@ function grade($cod) {
     $sql = mysqli_query($mysqli, $query) or die();
 
     while ($con = mysqli_fetch_array($sql)) {
-        $horarios = str_split(trim($con['horario']));
+        $espaco = str_replace(" ", "", $con['horario']);
+        $horarios = str_split($espaco);
         $cod_disciplina = $con['cod_disciplina'];
 
         foreach ($horarios as $horario) {
@@ -62,11 +106,18 @@ function grade($cod) {
             } elseif ($cod_disciplina == 'XEXT') {
                 array_push($ext[$index], $horario);
             } else {
-                array_push($aula[$index], $horario);
+                if (in_array($cod_disciplina, $nao_conta)) {
+                    
+                } else {
+                    array_push($aula[$index], $horario);
+                }
             }
-            array_push($modulo[$index], $horario);
+            if (in_array($cod_disciplina, $nao_conta)) {
+                
+            } else {
+                array_push($modulo[$index], $horario);
+            }
         }
-        
     }
 
     for ($index = 2; $index < 8; $index++) {
@@ -85,7 +136,7 @@ function grade($cod) {
         }
         $aula[$index] = $vetor;
     }
- 
+
     $horarios = ['AULA', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q'];
     $horas = ['AULA' => '',
         'A' => '7h',
@@ -161,36 +212,32 @@ function grade($cod) {
                     
                 } elseif (in_array($horario, $aula[$diasNumero[$dia]])) {
                     $linha.="<td>AULA</td>";
-                    $N_aula+=1;
                 } elseif (in_array($horario, $adm[$diasNumero[$dia]])) {
                     $linha.="<td>ADM</td>";
-                    $N_adm+=1;
                 } elseif (in_array($horario, $pesq[$diasNumero[$dia]])) {
                     $linha.="<td>PESQ</td>";
-                    $N_pesq+=1;
                 } elseif (in_array($horario, $ext[$diasNumero[$dia]])) {
                     $linha.="<td>EXT</td>";
-                    $N_ext+=1;
                 } else {
-                  if ($x > 0 && $x < 16) {
-                      if (in_array($horarios[$x - 1], $modulo[$diasNumero[$dia]])or in_array($horarios[$x + 1], $modulo[$diasNumero[$dia]])) {
-                      $linha.="<td></td>";
-                      } else {
+                    if ($x > 0 && $x < 16) {
+                        if (in_array($horarios[$x - 1], $modulo[$diasNumero[$dia]])or in_array($horarios[$x + 1], $modulo[$diasNumero[$dia]])) {
+                            $linha.="<td></td>";
+                        } else {
 
-                      //if ($x == 1) {
-                      //    $linha.="<td></td>";
-                      //} else {
-                      $linha.="<td><select class=\"form-control\" name=\"$diasNumero[$dia]$horario\">
+                            //if ($x == 1) {
+                            //    $linha.="<td></td>";
+                            //} else {
+                            $linha.="<td><select class=\"form-control\" name=\"$diasNumero[$dia]$horario\">
                       <option></option>
                       <option value=\"ADM\">ADM</option>
                       <option value=\"PES\">PES</option>
                       <option value=\"EXT\">EXT</option>
                       </select></td>";
-                      }
-                      } else {
+                        }
+                    } else {
 
-                      $linha.="<td></td>";
-                      }
+                        $linha.="<td></td>";
+                    }
                 }
             }
         }
@@ -285,4 +332,19 @@ function inserir($cod_professor) {
     $query = "INSERT INTO `hora_prof` ( `periodo`, `cod_disciplina`, `materia`,  `cod_professor`, `professor`, `horario`) "
             . "VALUES ('20172', 'XEXT', 'EXTENSAO', '$cod_professor', '$professor', '$ext_sql');";
     $sql = mysqli_query($mysqli, $query) or die();
+}
+
+function listaDisciplina($cod_professor) {
+    $nao_conta = ['XADM','XPESQ','XEXT','ECO1813', 'ECO1814', 'SER1907', 'SER1908', 'CTE1807', 'CTE1817', 'CTE1818'];
+    $mysqli = mysqli_connect("localhost", "root", "", "eaish_2");
+    $query = "SELECT * FROM `hora_prof` WHERE `cod_professor`='$cod_professor';";
+    $sql = mysqli_query($mysqli, $query) or die();
+
+    while ($con = mysqli_fetch_array($sql)) {
+        if (in_array($con['cod_disciplina'], $nao_conta)) {
+            
+        } else {
+            echo "<tr><td style=\"text-align: left\" colspan=\"3\">$con[materia]</td><td>$con[cod_disciplina]</td><td style=\"text-align: left\" colspan=\"4\">$con[horario]</td></tr>";
+        }
+    }
 }
